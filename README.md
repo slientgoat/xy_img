@@ -9,7 +9,7 @@ by adding `xy_img` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:xy_img, "~> 0.1.0"}]
+  [{:xy_img, git: "https://github.com/slientgoat/xy_img.git"},]
 end
 ```
 
