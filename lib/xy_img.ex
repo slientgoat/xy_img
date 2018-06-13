@@ -5,13 +5,14 @@ defmodule XyImg do
 
   def expires, do: Application.get_env(:xy_img, :expires) #图片存在时长
   def path, do: Application.get_env(:xy_img, :path, "images/xy_img") #static图片存放目录
-
+  def phx_name Application.get_env(:xy_img, :phx_name) || :xy_img #phoenix项目名称
 
   @doc """
   图片存放路径.
   """
   def save_path() do
-    save_dir = Path.join([File.cwd!(), "priv/static", path()])
+    appdir = Application.app_dir(phx_name())
+    save_dir = Path.join([appdir, "priv/static", path()])
     File.exists?(save_dir) || File.mkdir_p!(save_dir)
     save_dir
   end
