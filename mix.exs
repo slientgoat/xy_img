@@ -15,7 +15,7 @@ defmodule XyImg.Mixfile do
   def application do
     [
       extra_applications: [:logger],
-      applications: [:uuid]
+      applications: [:elixir_uuid]
     ]
   end
 
