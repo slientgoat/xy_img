@@ -44,8 +44,8 @@ defmodule XyImg do
   @doc """
   创建多媒体文件。
   """
-  def create("image/" <> _type, data_bin), do: create_img(expires(), data_bin)
-  def create("video/" <> _type, data_bin), do: create_video(expires(), data_bin)
+  def create("image/" <> _ = type, data_bin), do: create_img(type, data_bin)
+  def create("video/" <> _ = type, data_bin), do: create_video(type, data_bin)
 
   @doc """
   创建图片。
