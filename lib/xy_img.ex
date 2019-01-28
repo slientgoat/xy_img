@@ -41,35 +41,42 @@ defmodule XyImg do
     File.exists?(save_path()) || File.mkdir_p!(save_path())
   end
 
+  @doc """
+  创建多媒体文件。
+  """
+  def create("image/" <> _type, data_bin), do: create_img(expires(), data_bin)
+  def create("video/" <> _type, data_bin), do: create_video(expires(), data_bin)
 
   @doc """
   创建图片。
   """
-  def create_img("image/jpeg", data_bin) do
-    do_create_img(expires(), data_bin, ".jpg")
-  end
-  def create_img("image/png", data_bin) do
-    do_create_img(expires(), data_bin, ".png")
-  end
-  def create_img("image/gif", data_bin) do
-    do_create_img(expires(), data_bin, ".gif")
-  end
-  def create_img(_unknow_support_type, _data_bin) do
-    {:error, :unknow_support_type}
-  end
-  defp do_create_img(nil, data_bin, postfix) do
+  def create_img("image/jpeg", data_bin), do: do_create(expires(), data_bin, ".jpg")
+  def create_img("image/png", data_bin), do: do_create(expires(), data_bin, ".png")
+  def create_img("image/gif", data_bin), do: do_create(expires(), data_bin, ".gif")
+  def create_img(_unknow_support_type, _data_bin), do: {:error, :unknow_support_type}
+
+  @doc """
+  创建视频。
+  """
+  def create_video("video/mp4", data_bin), do: do_create(expires(), data_bin, ".mp4")
+  def create_video("video/mkv", data_bin), do: do_create(expires(), data_bin, ".mkv")
+  def create_video("video/avi", data_bin), do: do_create(expires(), data_bin, ".avi")
+  def create_video(_unknow_support_type, _data_bin), do: {:error, :unknow_support_type}
+
+  defp do_create(nil, data_bin, postfix) do
     filename = UUID.uuid4(:hex) <> postfix
     File.write!(file_path(filename), data_bin)
     {:ok, filename}
   end
-  defp do_create_img(expires, data_bin, postfix) do
-    {:ok, filename} = do_create_img(nil, data_bin, postfix)
+  defp do_create(expires_time, data_bin, postfix) do
+    {:ok, filename} = do_create(nil, data_bin, postfix)
     spawn(
       fn () ->
-        Process.sleep(expires)
+        Process.sleep(expires_time)
         del_file(filename)
       end
     )
     {:ok, filename}
   end
+
 end
